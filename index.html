@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEVERUP - 领先的企业研究及咨询服务</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑", sans-serif; }
+
+        /* 头部样式 */
+        header { display: flex; align-items: center; justify-content: space-between; padding: 15px 50px; background: #fff; border-bottom: 1px solid #EEEBE6; }
+        .logo { display: flex; align-items: center; gap: 8px; }
+        .logo img { height: 45px; }
+        nav { display: flex; align-items: center; }
+        nav a { margin: 0 18px; text-decoration: none; color: #463221; font-size: 15px; transition: color 0.3s; }
+        nav a:hover { color: #AC8B72; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .login-btn { background: #AC8B72; color: #fff; padding: 10px 20px; border-radius: 4px; text-decoration: none; font-size: 14px; transition: background 0.3s; }
+        .login-btn:hover { background: #463221; }
+
+        /* Banner轮播样式 */
+        .banner { position: relative; height: 740px; overflow: hidden; }
+        .banner-slider { display: flex; width: 300%; height: 100%; transition: transform 0.6s ease-in-out; }
+        .banner-slide { width: 33.333%; height: 100%; position: relative; flex-shrink: 0; }
+        .banner-slide img { width: 100%; height: 100%; object-fit: cover; }
+        .banner-text { position: absolute; top: 30%; left: 50px; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); background: rgba(0,0,0,0.4); padding: 30px 40px; border-radius: 12px; }
+        .banner-text h1 { font-size: 40px; margin-bottom: 20px; }
+        .banner-text p { font-size: 18px; margin-bottom: 30px; max-width: 600px; }
+        .banner-btn { display: inline-block; padding: 12px 25px; background: #AC8B72; color: #fff; text-decoration: none; border-radius: 4px; margin-right: 15px; transition: background 0.3s; }
+        .banner-btn:hover { background: #463221; }
+        .banner-btn-outline { background: transparent; border: 2px solid #fff; }
+        .banner-btn-outline:hover { background: rgba(255,255,255,0.2); }
+        .banner-dots { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 12px; }
+        .banner-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.5); cursor: pointer; transition: all 0.3s; }
+        .banner-dot.active { background: #fff; transform: scale(1.2); }
+
+        /* 关于我们样式 */
+        .about { padding: 80px 50px; background: #fff; }
+        .about h2 { font-size: 32px; margin-bottom: 10px; color: #463221; text-align: center; }
+        .about-desc { color: #AC8B72; margin-bottom: 50px; text-align: center; }
+        .about-container { display: flex; gap: 50px; max-width: 1100px; margin: 0 auto; align-items: flex-start; }
+        .about-img { flex: 0 0 45%; height: 420px; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(70,50,33,0.15); }
+        .about-img img { width: 100%; height: 100%; object-fit: cover; }
+        .about-right { flex: 1; display: flex; flex-direction: column; }
+        .about-tabs { display: flex; gap: 0; margin-bottom: 25px; border-bottom: 2px solid #EEEBE6; }
+        .about-tab { padding: 12px 20px; background: transparent; border: none; color: #888; font-size: 15px; cursor: pointer; position: relative; transition: all 0.3s; }
+        .about-tab:hover { color: #463221; }
+        .about-tab.active { color: #463221; font-weight: bold; }
+        .about-tab.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 2px; background: #AC8B72; }
+        .about-tab-progress { position: absolute; bottom: -2px; left: 0; width: 0; height: 2px; background: rgba(172,139,114,0.3); }
+        .about-tab.active .about-tab-progress { animation: tabProgress 5s linear forwards; }
+        @keyframes tabProgress { from { width: 0; } to { width: 100%; } }
+        .about-panels { flex: 1; position: relative; overflow: hidden; }
+        .about-panel { position: absolute; top: 0; left: 0; width: 100%; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s; }
+        .about-panel.active { opacity: 1; visibility: visible; position: relative; }
+        .about-panel h3 { color: #463221; font-size: 20px; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .about-panel h3 .tag { background: #AC8B72; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: normal; }
+        .about-panel > p { color: #666; line-height: 1.8; margin-bottom: 20px; }
+        .about-panel-list { display: flex; flex-direction: column; gap: 12px; }
+        .about-panel-item { display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; background: #F8F6F3; border-radius: 8px; transition: all 0.3s; }
+        .about-panel-item:hover { background: #EEEBE6; transform: translateX(5px); }
+        .about-panel-item .icon { width: 36px; height: 36px; background: linear-gradient(135deg, #AC8B72 0%, #8a7260 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; color: #fff; }
+        .about-panel-item .info h4 { color: #463221; font-size: 15px; margin-bottom: 4px; }
+        .about-panel-item .info p { color: #888; font-size: 13px; line-height: 1.5; }
+        .about-value-cards { display: flex; gap: 20px; }
+        .about-value-card { flex: 1; padding: 20px; background: linear-gradient(135deg, #F8F6F3 0%, #fff 100%); border-radius: 12px; border: 1px solid #EEEBE6; transition: all 0.3s; }
+        .about-value-card:hover { border-color: #AC8B72; box-shadow: 0 5px 20px rgba(70,50,33,0.1); }
+        .about-value-card h4 { color: #463221; font-size: 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .about-value-card h4 span { font-size: 20px; }
+        .about-value-card p { color: #666; font-size: 13px; line-height: 1.7; }
+        .about-stats { display: flex; justify-content: center; gap: 80px; margin-top: 60px; padding-top: 40px; border-top: 1px solid #EEEBE6; }
+        .stat-item { text-align: center; }
+        .stat-item h3 { font-size: 36px; color: #AC8B72; margin-bottom: 10px; }
+        .stat-item p { color: #463221; }
+
+        /* 服务行业样式 */
+        .industries { padding: 80px 50px; background: #F8F6F3; }
+        .industries h2 { text-align: center; font-size: 32px; margin-bottom: 10px; color: #463221; }
+        .industries-desc { text-align: center; color: #AC8B72; margin-bottom: 50px; }
+        .industries-wrapper { display: flex; gap: 40px; max-width: 1100px; margin: 0 auto; }
+        .industry-category { flex: 1; background: #fff; border-radius: 12px; padding: 35px 30px; box-shadow: 0 5px 20px rgba(70,50,33,0.08); }
+        .category-title { display: flex; align-items: center; gap: 10px; margin-bottom: 25px; padding-bottom: 15px; border-bottom: 2px solid #EEEBE6; }
+        .category-title h3 { color: #463221; font-size: 20px; }
+        .category-tag { background: #AC8B72; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+        .industry-list { display: flex; flex-direction: column; gap: 15px; }
+        .industry-item { display: flex; align-items: center; gap: 15px; padding: 18px 20px; background: #F8F6F3; border-radius: 8px; transition: all 0.3s; cursor: pointer; }
+        .industry-item:hover { background: #EEEBE6; transform: translateX(5px); }
+        .industry-icon { width: 45px; height: 45px; background: #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+        .industry-info h4 { color: #463221; font-size: 16px; margin-bottom: 4px; }
+        .industry-info p { color: #888; font-size: 13px; }
+
+        /* 解决方案样式 */
+        .solutions { padding: 80px 50px; background: #fff; }
+        .solutions h2 { text-align: center; font-size: 32px; margin-bottom: 10px; color: #463221; }
+        .solutions-desc { text-align: center; color: #AC8B72; margin-bottom: 50px; }
+        .solutions-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1100px; margin: 0 auto; }
+        .solution-item { background: linear-gradient(180deg, #F8F6F3 0%, #fff 100%); border-radius: 12px; padding: 35px 30px; border: 1px solid #EEEBE6; transition: all 0.3s; }
+        .solution-item:hover { border-color: #AC8B72; box-shadow: 0 10px 30px rgba(70,50,33,0.1); }
+        .solution-num { font-size: 42px; font-weight: bold; color: #EEEBE6; margin-bottom: 15px; }
+        .solution-item h4 { color: #463221; font-size: 18px; margin-bottom: 12px; }
+        .solution-item p { color: #666; font-size: 14px; line-height: 1.8; margin-bottom: 20px; }
+        .solution-link { color: #AC8B72; text-decoration: none; font-size: 14px; display: inline-flex; align-items: center; gap: 5px; transition: color 0.3s; }
+        .solution-link:hover { color: #463221; }
+
+        /* 市场洞察样式 */
+        .insights { padding: 80px 50px; background: linear-gradient(135deg, #463221 0%, #5a4332 100%); }
+        .insights h2 { text-align: center; font-size: 32px; margin-bottom: 10px; color: #fff; }
+        .insights-desc { text-align: center; color: #AC8B72; margin-bottom: 50px; }
+        .insights-wrapper { display: flex; gap: 30px; max-width: 1100px; margin: 0 auto; }
+        .insight-category { flex: 1; background: rgba(255,255,255,0.03); border-radius: 16px; padding: 30px; border: 1px solid rgba(172,139,114,0.15); transition: all 0.3s; }
+        .insight-category:hover { background: rgba(255,255,255,0.06); border-color: rgba(172,139,114,0.3); }
+        .insight-header { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid rgba(172,139,114,0.2); }
+        .insight-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #AC8B72 0%, #8a7260 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .insight-header h4 { color: #fff; font-size: 18px; }
+        .insight-list { display: flex; flex-direction: column; gap: 12px; }
+        .insight-item { display: block; padding: 14px 16px; background: rgba(255,255,255,0.03); border-radius: 8px; color: #EEEBE6; font-size: 14px; text-decoration: none; transition: all 0.3s; line-height: 1.5; }
+        .insight-item:hover { background: rgba(172,139,114,0.2); transform: translateX(5px); color: #fff; }
+        .insight-more { display: inline-flex; align-items: center; gap: 5px; margin-top: 15px; color: #AC8B72; font-size: 14px; text-decoration: none; transition: color 0.3s; }
+        .insight-more:hover { color: #fff; }
+
+        /* 关于我们样式 */
+        .cases { padding: 80px 50px; background: #F8F6F3; }
+        .cases h2 { text-align: center; font-size: 32px; margin-bottom: 10px; color: #463221; }
+        .cases-desc { text-align: center; color: #AC8B72; margin-bottom: 50px; }
+        .cases-list { display: flex; justify-content: center; gap: 30px; flex-wrap: wrap; }
+        .case-item { width: 350px; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 5px 20px rgba(70,50,33,0.1); transition: transform 0.3s, box-shadow 0.3s; }
+        .case-item:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(70,50,33,0.15); }
+        .case-img { height: 200px; overflow: hidden; }
+        .case-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .case-item:hover .case-img img { transform: scale(1.05); }
+        .case-text { padding: 20px; }
+        .case-text h3 { margin-bottom: 10px; color: #463221; }
+        .case-text p { color: #666; font-size: 14px; margin-bottom: 15px; line-height: 1.6; }
+        .case-info { font-size: 12px; color: #AC8B72; }
+
+        /* 联系合作样式 */
+        .contact { padding: 80px 50px; background: #fff; }
+        .contact h2 { text-align: center; font-size: 32px; margin-bottom: 10px; color: #463221; }
+        .contact-desc { text-align: center; color: #AC8B72; margin-bottom: 50px; }
+        .contact-wrapper { display: flex; gap: 40px; max-width: 1100px; margin: 0 auto; }
+        .contact-info { flex: 1; }
+        .contact-item { display: flex; align-items: flex-start; gap: 20px; padding: 25px; background: #F8F6F3; border-radius: 12px; margin-bottom: 20px; transition: all 0.3s; }
+        .contact-item:hover { background: #EEEBE6; }
+        .contact-icon { width: 50px; height: 50px; background: linear-gradient(135deg, #AC8B72 0%, #8a7260 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+        .contact-detail h4 { color: #463221; font-size: 16px; margin-bottom: 8px; }
+        .contact-detail p { color: #666; font-size: 14px; line-height: 1.6; }
+        .contact-form { flex: 1; background: #F8F6F3; border-radius: 12px; padding: 35px; }
+        .contact-form h3 { color: #463221; font-size: 20px; margin-bottom: 25px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: #463221; font-size: 14px; margin-bottom: 8px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px 15px; border: 1px solid #EEEBE6; border-radius: 8px; font-size: 14px; transition: border-color 0.3s; }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: #AC8B72; }
+        .form-group textarea { height: 100px; resize: none; }
+        .form-submit { width: 100%; padding: 14px; background: #AC8B72; color: #fff; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; transition: background 0.3s; }
+        .form-submit:hover { background: #463221; }
+
+        /* 咨询模块样式 */
+        .consult { padding: 60px 50px; background: linear-gradient(135deg, #AC8B72 0%, #463221 100%); color: #fff; text-align: center; }
+        .consult h2 { font-size: 28px; margin-bottom: 20px; }
+        .consult p { margin-bottom: 30px; opacity: 0.9; }
+        .consult-form { display: flex; justify-content: center; gap: 15px; }
+        .consult-form input { padding: 12px 20px; width: 300px; border: none; border-radius: 4px; }
+        .consult-form button { padding: 12px 25px; background: #fff; color: #463221; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: all 0.3s; }
+        .consult-form button:hover { background: #EEEBE6; }
+
+        /* 加入我们样式 */
+        .join-us { margin-top: 50px; padding: 35px 40px; background: linear-gradient(135deg, #F8F6F3 0%, #fff 100%); border-radius: 16px; border: 1px solid #EEEBE6; max-width: 1100px; margin-left: auto; margin-right: auto; }
+        .join-us-header { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .join-us-header h3 { color: #463221; font-size: 22px; display: flex; align-items: center; gap: 12px; }
+        .join-us-header .tag { background: #AC8B72; color: #fff; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: normal; }
+        .join-us-cards { display: flex; gap: 25px; }
+        .join-us-card { flex: 1; padding: 25px; background: #fff; border-radius: 12px; border: 1px solid #EEEBE6; transition: all 0.3s; }
+        .join-us-card:hover { border-color: #AC8B72; box-shadow: 0 8px 25px rgba(70,50,33,0.1); transform: translateY(-3px); }
+        .join-us-card .icon { width: 50px; height: 50px; background: linear-gradient(135deg, #AC8B72 0%, #8a7260 100%); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 18px; }
+        .join-us-card h4 { color: #463221; font-size: 17px; margin-bottom: 10px; }
+        .join-us-card p { color: #666; font-size: 14px; line-height: 1.7; margin-bottom: 15px; }
+        .join-us-card a { color: #AC8B72; font-size: 14px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px; transition: color 0.3s; }
+        .join-us-card a:hover { color: #463221; }
+
+        /* 底部样式 */
+        footer { padding: 50px; background: #463221; color: #fff; }
+        .footer-content { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 30px; }
+        .footer-col h4 { margin-bottom: 20px; font-size: 18px; color: #EEEBE6; }
+        .footer-col p { color: #AC8B72; line-height: 1.8; }
+        .footer-col a { display: block; color: #AC8B72; text-decoration: none; margin: 8px 0; transition: color 0.3s; }
+        .footer-col a:hover { color: #fff; }
+        .social { margin-top: 20px; display: flex; gap: 15px; }
+        .social a { color: #AC8B72; font-size: 20px; }
+        .copyright { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(172,139,114,0.3); color: #AC8B72; font-size: 14px; }
+
+        /* 汉堡菜单按钮 */
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 10px; }
+        .menu-toggle span { width: 25px; height: 3px; background: #463221; border-radius: 2px; transition: all 0.3s; }
+        .menu-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .menu-toggle.active span:nth-child(2) { opacity: 0; }
+        .menu-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -6px); }
+        .nav-login { display: none; }
+
+        /* 平板端适配 (768px - 1024px) */
+        @media (max-width: 1024px) {
+            header { padding: 15px 30px; }
+            nav a { margin: 0 12px; font-size: 14px; }
+            .banner { height: 600px; }
+            .banner-text { left: 30px; padding: 25px 30px; }
+            .banner-text h1 { font-size: 32px; }
+            .banner-text p { font-size: 16px; }
+            .about, .industries, .solutions, .insights, .cases, .contact { padding: 60px 30px; }
+            .about h2, .industries h2, .solutions h2, .insights h2, .cases h2, .contact h2 { font-size: 28px; }
+            .about-container { gap: 30px; }
+            .about-img { height: 380px; }
+            .solutions-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+            .insights-wrapper { gap: 20px; }
+            .about-stats { gap: 40px; }
+            .stat-item h3 { font-size: 30px; }
+            footer { padding: 40px 30px; }
+        }
+
+        /* 手机端适配 (< 768px) */
+        @media (max-width: 768px) {
+            /* Header */
+            header { padding: 12px 20px; position: relative; }
+            .menu-toggle { display: flex; }
+            nav {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: #fff;
+                flex-direction: column;
+                padding: 0;
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.3s ease;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+                z-index: 1000;
+            }
+            nav.active { max-height: 400px; padding: 20px 0; }
+            nav a { margin: 0; padding: 15px 20px; border-bottom: 1px solid #EEEBE6; }
+            nav a:last-child { border-bottom: none; }
+            .logo img { height: 35px; }
+            .header-right { display: none; }
+            .nav-login { display: block; background: #AC8B72; color: #fff !important; margin: 15px 20px 0; border-radius: 6px; text-align: center; border-bottom: none !important; }
+
+            /* Banner */
+            .banner { height: 500px; }
+            .banner-text { left: 20px; right: 20px; top: 25%; padding: 20px 25px; }
+            .banner-text h1 { font-size: 24px; margin-bottom: 15px; }
+            .banner-text p { font-size: 14px; margin-bottom: 20px; }
+            .banner-btn { padding: 10px 18px; font-size: 14px; margin-right: 10px; margin-bottom: 10px; }
+            .banner-dots { bottom: 20px; }
+            .banner-dot { width: 10px; height: 10px; }
+
+            /* 服务行业 */
+            .industries { padding: 50px 20px; }
+            .industries h2 { font-size: 24px; }
+            .industries-desc { font-size: 14px; margin-bottom: 30px; }
+            .industries-wrapper { flex-direction: column; gap: 25px; }
+            .industry-category { padding: 25px 20px; }
+            .category-title h3 { font-size: 18px; }
+            .industry-item { padding: 14px 16px; }
+            .industry-icon { width: 40px; height: 40px; font-size: 18px; }
+            .industry-info h4 { font-size: 15px; }
+            .industry-info p { font-size: 12px; }
+
+            /* 解决方案 */
+            .solutions { padding: 50px 20px; }
+            .solutions h2 { font-size: 24px; }
+            .solutions-desc { font-size: 14px; margin-bottom: 30px; }
+            .solutions-grid { grid-template-columns: 1fr; gap: 20px; }
+            .solution-item { padding: 25px 20px; }
+            .solution-num { font-size: 32px; }
+            .solution-item h4 { font-size: 16px; }
+            .solution-item p { font-size: 13px; }
+
+            /* 市场洞察 */
+            .insights { padding: 50px 20px; }
+            .insights h2 { font-size: 24px; }
+            .insights-desc { font-size: 14px; margin-bottom: 30px; }
+            .insights-wrapper { flex-direction: column; gap: 20px; }
+            .insight-category { padding: 25px 20px; }
+            .insight-header h4 { font-size: 16px; }
+            .insight-icon { width: 40px; height: 40px; font-size: 20px; }
+            .insight-item { padding: 12px 14px; font-size: 13px; }
+
+            /* 关于我们 */
+            .about { padding: 50px 20px; }
+            .about h2 { font-size: 24px; }
+            .about-desc { font-size: 14px; margin-bottom: 30px; }
+            .about-container { flex-direction: column; gap: 30px; }
+            .about-img { flex: none; width: 100%; height: 250px; }
+            .about-right { width: 100%; }
+            .about-tabs { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            .about-tab { padding: 10px 15px; font-size: 14px; white-space: nowrap; }
+            .about-panel h3 { font-size: 18px; flex-wrap: wrap; }
+            .about-panel h3 .tag { font-size: 11px; padding: 3px 10px; }
+            .about-panel > p { font-size: 14px; }
+            .about-panel-item { padding: 12px 14px; }
+            .about-panel-item .icon { width: 32px; height: 32px; font-size: 14px; }
+            .about-panel-item .info h4 { font-size: 14px; }
+            .about-panel-item .info p { font-size: 12px; }
+            .about-value-cards { flex-direction: column; gap: 15px; }
+            .about-value-card { padding: 18px; }
+            .about-value-card h4 { font-size: 15px; }
+            .about-value-card p { font-size: 12px; }
+            .about-stats { flex-wrap: wrap; gap: 30px; justify-content: space-around; }
+            .stat-item { flex: 0 0 40%; }
+            .stat-item h3 { font-size: 28px; }
+            .stat-item p { font-size: 13px; }
+
+            /* 加入我们 */
+            .join-us { margin-top: 30px; padding: 25px 20px; }
+            .join-us-header h3 { font-size: 18px; }
+            .join-us-header .tag { font-size: 11px; padding: 3px 10px; }
+            .join-us-cards { flex-direction: column; gap: 15px; }
+            .join-us-card { padding: 20px; }
+            .join-us-card .icon { width: 40px; height: 40px; font-size: 18px; margin-bottom: 15px; }
+            .join-us-card h4 { font-size: 15px; }
+            .join-us-card p { font-size: 13px; }
+
+            /* 成功案例 */
+            .cases { padding: 50px 20px; }
+            .cases h2 { font-size: 24px; }
+            .cases-desc { font-size: 14px; margin-bottom: 30px; }
+            .cases-list { flex-direction: column; align-items: center; }
+            .case-item { width: 100%; max-width: 400px; }
+            .case-img { height: 180px; }
+            .case-text { padding: 18px; }
+            .case-text h3 { font-size: 16px; }
+            .case-text p { font-size: 13px; }
+
+            /* 联系合作 */
+            .contact { padding: 50px 20px; }
+            .contact h2 { font-size: 24px; }
+            .contact-desc { font-size: 14px; margin-bottom: 30px; }
+            .contact-wrapper { flex-direction: column; gap: 30px; }
+            .contact-item { padding: 20px; }
+            .contact-icon { width: 45px; height: 45px; font-size: 18px; }
+            .contact-detail h4 { font-size: 15px; }
+            .contact-detail p { font-size: 13px; }
+            .contact-form { padding: 25px 20px; }
+            .contact-form h3 { font-size: 18px; }
+            .form-group input, .form-group textarea { padding: 10px 12px; font-size: 14px; }
+
+            /* 咨询模块 */
+            .consult { padding: 40px 20px; }
+            .consult h2 { font-size: 22px; }
+            .consult p { font-size: 14px; }
+            .consult-form { flex-direction: column; align-items: center; }
+            .consult-form input { width: 100%; max-width: 300px; }
+            .consult-form button { width: 100%; max-width: 300px; }
+
+            /* Footer */
+            footer { padding: 40px 20px; }
+            .footer-content { flex-direction: column; gap: 30px; }
+            .footer-col { width: 100%; }
+            .footer-col h4 { font-size: 16px; margin-bottom: 15px; }
+            .footer-col p { font-size: 13px; }
+            .footer-col a { font-size: 13px; }
+            .copyright { font-size: 12px; margin-top: 30px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部 -->
+    <header>
+        <div class="logo">
+            <img src="images/logo1.png" alt="至和咨询">
+        </div>
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav id="navMenu">
+            <a href="#banner">首页</a>
+            <a href="#industries">服务行业</a>
+            <a href="#solutions">解决方案</a>
+            <a href="#insights">市场洞察</a>
+            <a href="#about">关于我们</a>
+            <a href="#contact">联系合作</a>
+            <a href="login.html" class="nav-login">用户登录</a>
+        </nav>
+        <div class="header-right">
+            <a href="login.html" class="login-btn">用户登录</a>
+        </div>
+    </header>
+
+    <!-- banner轮播 -->
+    <section class="banner" id="banner">
+        <div class="banner-slider" id="bannerSlider">
+            <div class="banner-slide">
+                <img src="images/banner1.png" alt="轮播图1">
+                <div class="banner-text">
+                    <h1>领先的企业研究及咨询服务</h1>
+                    <p>LEVERUP致力于为企业提供专业、全面的市场研究和战略咨询服务，助力企业决策与可持续发展</p>
+                    <a href="#solutions" class="banner-btn">了解我们的服务</a>
+                    <a href="#contact" class="banner-btn banner-btn-outline">预约咨询</a>
+                </div>
+            </div>
+            <div class="banner-slide">
+                <img src="images/banner2.png" alt="轮播图2">
+                <div class="banner-text">
+                    <h1>深度市场洞察与分析</h1>
+                    <p>凭借专业的研究方法和丰富的行业经验，为您提供精准的市场趋势分析和竞争情报</p>
+                    <a href="#solutions" class="banner-btn">查看解决方案</a>
+                    <a href="#contact" class="banner-btn banner-btn-outline">免费咨询</a>
+                </div>
+            </div>
+            <div class="banner-slide">
+                <img src="images/banner3.png" alt="轮播图3">
+                <div class="banner-text">
+                    <h1>定制化战略咨询方案</h1>
+                    <p>根据企业实际需求，量身打造战略规划方案，助力企业在竞争中脱颖而出</p>
+                    <a href="#about" class="banner-btn">探索更多</a>
+                    <a href="#contact" class="banner-btn banner-btn-outline">联系我们</a>
+                </div>
+            </div>
+        </div>
+        <div class="banner-dots">
+            <span class="banner-dot active" data-index="0"></span>
+            <span class="banner-dot" data-index="1"></span>
+            <span class="banner-dot" data-index="2"></span>
+        </div>
+    </section>
+
+    <!-- 服务行业 -->
+    <section class="industries" id="industries">
+        <h2>服务行业</h2>
+        <p class="industries-desc">深耕零售与服务两大核心领域，为不同行业客户提供专业化解决方案</p>
+        <div class="industries-wrapper">
+            <!-- 零售行业 -->
+            <div class="industry-category">
+                <div class="category-title">
+                    <h3>零售行业</h3>
+                    <span class="category-tag">Retail</span>
+                </div>
+                <div class="industry-list">
+                    <div class="industry-item">
+                        <div class="industry-icon">📱</div>
+                        <div class="industry-info">
+                            <h4>高端电子</h4>
+                            <p>智能手机、消费电子、数码产品等</p>
+                        </div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">🔋</div>
+                        <div class="industry-info">
+                            <h4>新能源</h4>
+                            <p>新能源汽车、储能设备、充电设施等</p>
+                        </div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">🛍️</div>
+                        <div class="industry-info">
+                            <h4>消费品</h4>
+                            <p>快消品、日用品、食品饮料等</p>
+                        </div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">⚽</div>
+                        <div class="industry-info">
+                            <h4>运动</h4>
+                            <p>运动装备、健身器材、户外用品等</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 服务行业 -->
+            <div class="industry-category">
+                <div class="category-title">
+                    <h3>服务行业</h3>
+                    <span class="category-tag">Service</span>
+                </div>
+                <div class="industry-list">
+                    <div class="industry-item">
+                        <div class="industry-icon">🏨</div>
+                        <div class="industry-info">
+                            <h4>酒店</h4>
+                            <p>星级酒店、连锁酒店、民宿等</p>
+                        </div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">🏬</div>
+                        <div class="industry-info">
+                            <h4>百货</h4>
+                            <p>购物中心、百货商场、综合体等</p>
+                        </div>
+                    </div>
+                    <div class="industry-item">
+                        <div class="industry-icon">🏢</div>
+                        <div class="industry-info">
+                            <h4>地产</h4>
+                            <p>商业地产、住宅开发、物业管理等</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 解决方案 -->
+    <section class="solutions" id="solutions">
+        <h2>解决方案</h2>
+        <p class="solutions-desc">基于深度行业洞察，提供全方位的专业咨询服务</p>
+        <div class="solutions-grid">
+            <div class="solution-item">
+                <div class="solution-num">01</div>
+                <h4>组织诊断</h4>
+                <p>全面评估企业组织架构、流程效率与管理机制，识别组织痛点与优化空间，提供系统性改进方案。</p>
+                <!-- <a href="#" class="solution-link">了解详情 →</a> -->
+            </div>
+            <div class="solution-item">
+                <div class="solution-num">02</div>
+                <h4>零售管理标准</h4>
+                <p>建立科学的零售运营标准体系，涵盖门店管理、服务规范、陈列标准等，提升终端执行一致性。</p>
+                <!-- <a href="#" class="solution-link">了解详情 →</a> -->
+            </div>
+            <div class="solution-item">
+                <div class="solution-num">03</div>
+                <h4>人才发展</h4>
+                <p>构建人才培养体系，设计能力模型与发展路径，通过培训赋能与绩效辅导，打造高效团队。</p>
+                <!-- <a href="#" class="solution-link">了解详情 →</a> -->
+            </div>
+            <div class="solution-item">
+                <div class="solution-num">04</div>
+                <h4>零售绩效与战略</h4>
+                <p>制定零售业务战略规划，建立绩效管理体系，通过数据驱动优化运营效率与业绩增长。</p>
+                <!-- <a href="#" class="solution-link">了解详情 →</a> -->
+            </div>
+            <div class="solution-item">
+                <div class="solution-num">05</div>
+                <h4>市场调研</h4>
+                <p>通过定性与定量研究方法，深入了解市场规模、竞争格局、行业趋势，为战略决策提供数据支撑。</p>
+                <!-- <a href="#" class="solution-link">了解详情 →</a> -->
+            </div>
+            <div class="solution-item">
+                <div class="solution-num">06</div>
+                <h4>消费者行为</h4>
+                <p>深入洞察目标消费者的购买习惯、决策因素与需求痛点，为产品优化和营销策略提供依据。</p>
+                <!-- <a href="#" class="solution-link">了解详情 →</a> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 市场洞察 -->
+    <section class="insights" id="insights">
+        <h2>市场洞察</h2>
+        <p class="insights-desc">深度研究与专业分析，助您把握市场脉搏</p>
+        <div class="insights-wrapper">
+            <!-- 消费者洞察 -->
+            <div class="insight-category">
+                <div class="insight-header">
+                    <div class="insight-icon">👥</div>
+                    <h4>消费者洞察</h4>
+                </div>
+                <div class="insight-list">
+                    <a href="#" class="insight-item">Z世代消费行为与品牌偏好研究</a>
+                    <a href="#" class="insight-item">高端消费群体购买决策因素分析</a>
+                    <a href="#" class="insight-item">新零售场景下的消费者体验调研</a>
+                </div>
+                <!-- <a href="#" class="insight-more">查看更多 →</a> -->
+            </div>
+            <!-- 零售组织效能 -->
+            <div class="insight-category">
+                <div class="insight-header">
+                    <div class="insight-icon">📊</div>
+                    <h4>零售组织效能</h4>
+                </div>
+                <div class="insight-list">
+                    <a href="#" class="insight-item">零售门店运营效率提升方法论</a>
+                    <a href="#" class="insight-item">终端销售团队绩效管理最佳实践</a>
+                    <a href="#" class="insight-item">全渠道零售组织架构优化指南</a>
+                </div>
+                <!-- <a href="#" class="insight-more">查看更多 →</a> -->
+            </div>
+            <!-- 行业白皮书/报告 -->
+            <div class="insight-category">
+                <div class="insight-header">
+                    <div class="insight-icon">📑</div>
+                    <h4>行业白皮书/报告</h4>
+                </div>
+                <div class="insight-list">
+                    <a href="#" class="insight-item">2025中国高端电子零售市场白皮书</a>
+                    <a href="#" class="insight-item">新能源汽车渠道变革趋势报告</a>
+                    <a href="#" class="insight-item">运动消费品行业年度洞察报告</a>
+                </div>
+                <!-- <a href="#" class="insight-more">查看更多 →</a> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section class="about" id="about">
+        <h2>关于我们</h2>
+        <p class="about-desc">零售战略专家 · 您的增长赋能伙伴</p>
+        <div class="about-container">
+            <div class="about-img">
+                <img src="https://picsum.photos/id/26/500/420" alt="团队办公">
+            </div>
+            <div class="about-right">
+                <div class="about-tabs">
+                    <button class="about-tab active" data-tab="0">我们是谁<span class="about-tab-progress"></span></button>
+                    <button class="about-tab" data-tab="1">我们能做什么<span class="about-tab-progress"></span></button>
+                    <button class="about-tab" data-tab="2">为什么选择我们<span class="about-tab-progress"></span></button>
+                </div>
+                <div class="about-panels">
+                    <!-- Panel 1: 我们是谁 -->
+                    <div class="about-panel active" data-panel="0">
+                        <h3>零售战略专家 <span class="tag">Retail Expert</span></h3>
+                        <p>我们助力零售品牌，解决从战略蓝图到终端增长之间的核心断层。通过构建"运营标准 x 人才体系 x 数据驱动"一体化的增长底盘，我们将战略转化为可复制、可持续的门店扩张能力。</p>
+                        <p>我们是您实现规模化、高质量增长的核心赋能伙伴。</p>
+                    </div>
+                    <!-- Panel 2: 我们能做什么 -->
+                    <div class="about-panel" data-panel="1">
+                        <h3>端到端解决方案 <span class="tag">诊断-构建-赋能</span></h3>
+                        <p>我们的服务以"数据"为引擎，贯穿"战略、运营、人才"三大核心，形成可衡量、可优化的闭环。</p>
+                        <div class="about-panel-list">
+                            <div class="about-panel-item">
+                                <div class="icon">1</div>
+                                <div class="info">
+                                    <h4>顶层诊断与战略解码</h4>
+                                    <p>零售组织效能诊断 / 人才健康度诊断 / 消费行为调研</p>
+                                </div>
+                            </div>
+                            <div class="about-panel-item">
+                                <div class="icon">2</div>
+                                <div class="info">
+                                    <h4>系统构建与赋能</h4>
+                                    <p>运营标准体系 / 人才发展体系 / 数据驱动决策体系</p>
+                                </div>
+                            </div>
+                            <div class="about-panel-item">
+                                <div class="icon">3</div>
+                                <div class="info">
+                                    <h4>深度陪跑与变革管理</h4>
+                                    <p>组织变革与效能提升，确保新体系成功落地、扎根生长</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Panel 3: 为什么选择我们 -->
+                    <div class="about-panel" data-panel="2">
+                        <h3>可规模化的增长底盘 <span class="tag">Core Value</span></h3>
+                        <p>在零售战略同质化的今天，真正的护城河在于卓越且一致的终端执行与自我造血的组织能力。</p>
+                        <div class="about-value-cards">
+                            <div class="about-value-card">
+                                <h4><span>01</span> 破解增长困局</h4>
+                                <p>直接攻克"标准不一、人才断层、扩张走形"三大增长瓶颈，将战略蓝图转化为可复制的成功门店模型，保障从1到10、从10到100的增长质量与速度。</p>
+                            </div>
+                            <div class="about-value-card">
+                                <h4><span>02</span> 构建组织资产</h4>
+                                <p>我们交付的不是一叠报告，而是一套可迭代、可传承的"零售操作系统"和"人才供应链"，这是您应对竞争、持续扩张的核心护城河。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 加入我们 -->
+        <div class="join-us">
+            <div class="join-us-header">
+                <h3>加入我们 <span class="tag">Join Us</span></h3>
+            </div>
+            <div class="join-us-cards">
+                <div class="join-us-card">
+                    <div class="icon">📋</div>
+                    <h4>招聘信息</h4>
+                    <p>我们正在寻找志同道合的伙伴，查看当前开放的职位机会，加入我们共同成长。</p>
+                    <a href="#">查看岗位列表 →</a>
+                </div>
+                <div class="join-us-card">
+                    <div class="icon">⭐</div>
+                    <h4>人才需求标准</h4>
+                    <p>我们期待具备零售行业洞察力、数据分析能力、优秀沟通协作能力的专业人才。</p>
+                    <a href="#">了解详情 →</a>
+                </div>
+                <div class="join-us-card">
+                    <div class="icon">📧</div>
+                    <h4>投递简历</h4>
+                    <p>将您的简历发送至我们的招聘邮箱，我们会尽快与您联系。</p>
+                    <a href="mailto:hr@leverup.com">hr@leverup.com →</a>
+                </div>
+            </div>
+        </div>
+        <div class="about-stats">
+            <div class="stat-item">
+                <h3>15+</h3>
+                <p>年行业经验</p>
+            </div>
+            <div class="stat-item">
+                <h3>500+</h3>
+                <p>服务客户</p>
+            </div>
+            <div class="stat-item">
+                <h3>50+</h3>
+                <p>行业专家</p>
+            </div>
+            <div class="stat-item">
+                <h3>15+</h3>
+                <p>行业覆盖</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 成功案例 -->
+    <!-- <section class="cases">
+        <h2>成功案例</h2>
+        <p class="cases-desc">我们为各行业客户提供专业的研究咨询服务，助力企业实现业务增长</p>
+        <div class="cases-list">
+            <div class="case-item">
+                <div class="case-img">
+                    <img src="https://picsum.photos/id/180/350/200" alt="电梯行业研究">
+                </div>
+                <div class="case-text">
+                    <h3>全国电梯行业更新改造业务现状研究</h3>
+                    <p>通过量化行业内业务现状，帮助客户评估竞品市场份额、识别业务布局差异，从而优化资源配置决策。</p>
+                    <p class="case-info">行业：智能家居/物联网 | 周期：3个月</p>
+                </div>
+            </div>
+            <div class="case-item">
+                <div class="case-img">
+                    <img src="https://picsum.photos/id/239/350/200" alt="食品饮料行业">
+                </div>
+                <div class="case-text">
+                    <h3>食品饮料行业发展趋势与战略洞察项目</h3>
+                    <p>系统分析经济环境对食品饮料行业的影响机制，预判未来3-5年行业发展趋势，为食品饮料从业者提供包含...</p>
+                    <p class="case-info">行业：智能家居/物联网 | 周期：3个月</p>
+                </div>
+            </div>
+            <div class="case-item">
+                <div class="case-img">
+                    <img src="https://picsum.photos/id/48/350/200" alt="融合快充产业">
+                </div>
+                <div class="case-text">
+                    <h3>融合快充（UFCS）产业发展白皮书项目</h3>
+                    <p>本白皮书通过系统性分析融合快充技术标准研究、产业生态构建、市场规模及竞争环境等情况，全面评估融...</p>
+                    <p class="case-info">行业：智能家居/物联网 | 周期：3个月</p>
+                </div>
+            </div>
+        </div>
+    </section> -->
+
+    <!-- 联系合作 -->
+    <section class="contact" id="contact">
+        <h2>联系合作</h2>
+        <p class="contact-desc">期待与您携手，共创商业价值</p>
+        <div class="contact-wrapper">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-detail">
+                        <h4>公司地址</h4>
+                        <p>上海普陀区xxxxxxx</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-detail">
+                        <h4>联系电话</h4>
+                        <p>400-0000-000</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-detail">
+                        <h4>电子邮箱</h4>
+                        <p>hr@leverup.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="contact-icon">🕒</div>
+                    <div class="contact-detail">
+                        <h4>工作时间</h4>
+                        <p>周一至周五 9:00-18:00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form">
+                <h3>在线留言</h3>
+                <form>
+                    <div class="form-group">
+                        <label>您的姓名</label>
+                        <input type="text" placeholder="请输入您的姓名">
+                    </div>
+                    <div class="form-group">
+                        <label>联系方式</label>
+                        <input type="text" placeholder="请输入手机号或邮箱">
+                    </div>
+                    <div class="form-group">
+                        <label>合作需求</label>
+                        <textarea placeholder="请简要描述您的合作需求..."></textarea>
+                    </div>
+                    <button type="submit" class="form-submit">提交留言</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 咨询模块 -->
+    <section class="consult">
+        <h2>需要专业的咨询服务？</h2>
+        <p>无论您是寻求市场调研、竞争分析还是战略规划，我们的专家团队都能为您提供量身定制的解决方案</p>
+        <form class="consult-form">
+            <input type="email" placeholder="请输入您的邮箱">
+            <button type="submit">立即咨询</button>
+        </form>
+        <p style="font-size: 14px; margin-top: 10px;">我们将在24小时内与您联系</p>
+    </section>
+
+    <!-- 底部 -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h4>LEVERUP</h4>
+                <p>LEVERUP致力于为企业提供专业的研究和咨询服务，助力企业实现可持续发展</p>
+                <div class="social">
+                    <a href="#">💬</a>
+                    <a href="#">📢</a>
+                    <a href="#">🔗</a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>快速链接</h4>
+                <a href="#banner">网站首页</a>
+                <a href="#industries">服务行业</a>
+                <a href="#solutions">解决方案</a>
+                <a href="#insights">市场洞察</a>
+                <a href="#about">关于我们</a>
+                <a href="#contact">联系合作</a>
+            </div>
+            <!-- <div class="footer-col">
+                <h4>服务领域</h4>
+                <a href="#">市场调研</a>
+                <a href="#">竞争对手调研</a>
+                <a href="#">用户调研</a>
+                <a href="#">商业/投资尽调</a>
+                <a href="#">市场进入咨询</a>
+            </div> -->
+            <div class="footer-col">
+                <h4>联系我们</h4>
+                <p>海普陀区xxxxxxx</p>
+                <p>📞 400-0000-000</p>
+                <p>📧 hr@leverup.com</p>
+                <p>🕒 周一至周五 9:00-18:00</p>
+            </div>
+        </div>
+        <div class="copyright">
+            © 2025 LEVERUP信息咨询有限公司 版权所有
+        </div>
+    </footer>
+
+    <!-- 轮播JS -->
+    <script>
+        (function() {
+            const slider = document.getElementById('bannerSlider');
+            const dots = document.querySelectorAll('.banner-dot');
+            let currentIndex = 0;
+            const totalSlides = 3;
+            let autoPlayTimer;
+
+            function goToSlide(index) {
+                currentIndex = index;
+                slider.style.transform = `translateX(-${index * 33.333}%)`;
+                dots.forEach((dot, i) => {
+                    dot.classList.toggle('active', i === index);
+                });
+            }
+
+            function nextSlide() {
+                goToSlide((currentIndex + 1) % totalSlides);
+            }
+
+            function startAutoPlay() {
+                autoPlayTimer = setInterval(nextSlide, 4000);
+            }
+
+            function stopAutoPlay() {
+                clearInterval(autoPlayTimer);
+            }
+
+            dots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    stopAutoPlay();
+                    goToSlide(parseInt(dot.dataset.index));
+                    startAutoPlay();
+                });
+            });
+
+            startAutoPlay();
+        })();
+
+        // 关于我们Tab轮播
+        (function() {
+            const tabs = document.querySelectorAll('.about-tab');
+            const panels = document.querySelectorAll('.about-panel');
+            let currentTab = 0;
+            const totalTabs = 3;
+            let autoPlayTimer;
+            const interval = 5000;
+
+            function goToTab(index) {
+                currentTab = index;
+                tabs.forEach((tab, i) => {
+                    tab.classList.toggle('active', i === index);
+                });
+                panels.forEach((panel, i) => {
+                    panel.classList.toggle('active', i === index);
+                });
+            }
+
+            function nextTab() {
+                goToTab((currentTab + 1) % totalTabs);
+            }
+
+            function startAutoPlay() {
+                autoPlayTimer = setInterval(nextTab, interval);
+            }
+
+            function stopAutoPlay() {
+                clearInterval(autoPlayTimer);
+            }
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    stopAutoPlay();
+                    goToTab(parseInt(tab.dataset.tab));
+                    startAutoPlay();
+                });
+            });
+
+            startAutoPlay();
+        })();
+
+        // 汉堡菜单
+        (function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const navMenu = document.getElementById('navMenu');
+            const navLinks = navMenu.querySelectorAll('a');
+
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                navMenu.classList.toggle('active');
+            });
+
+            // 点击导航链接后关闭菜单
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    menuToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                });
+            });
+
+            // 点击页面其他地方关闭菜单
+            document.addEventListener('click', (e) => {
+                if (!menuToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                    menuToggle.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        })();
+    </script>
+</body>
+</html>
